@@ -10,6 +10,41 @@ import {
 import { AppError } from "../utils/AppError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
+export const getExtracurricularMedia = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const extracurricularId = Number(req.params.id);
+
+    if (!Number.isInteger(extracurricularId)) {
+      throw new AppError("ID ekstrakurikuler tidak valid", 400);
+    }
+
+    const extracurricular = await prisma.extracurricular.findUnique({
+      where: {
+        id: extracurricularId,
+      },
+    });
+
+    if (!extracurricular) {
+      throw new AppError("Data ekstrakurikuler tidak ditemukan", 404);
+    }
+
+    const data = await prisma.extracurricularMedia.findMany({
+      where: {
+        extracurricularId,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Dokumentasi ekstrakurikuler berhasil diambil",
+      data,
+    });
+  },
+);
+
 export const addExtracurricularMedia = catchAsync(
  async (req: AuthRequest, res: Response) => {
   const extracurricularId = Number(req.params.id);

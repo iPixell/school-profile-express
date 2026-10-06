@@ -721,40 +721,75 @@ export const openapi = {
   },
 
   "/extracurriculars/{id}/media": {
-   post: {
+  get: {
+    tags: ["Extracurricular Media"],
+    summary: "Mengambil dokumentasi media ekstrakurikuler",
+    parameters: [
+      {
+        name: "id",
+        in: "path",
+        required: true,
+        schema: { type: "integer" },
+      },
+    ],
+    responses: {
+      200: {
+        description: "Dokumentasi media ekstrakurikuler berhasil diambil",
+      },
+      400: {
+        description: "ID ekstrakurikuler tidak valid",
+      },
+      404: {
+        description: "Data ekstrakurikuler tidak ditemukan",
+      },
+    },
+  },
+
+  post: {
     tags: ["Extracurricular Media"],
     summary: "Upload media ekstrakurikuler",
     security: [{ bearerAuth: [] }],
     parameters: [
-     {
-      name: "id",
-      in: "path",
-      required: true,
-      schema: { type: "integer" },
-     },
+      {
+        name: "id",
+        in: "path",
+        required: true,
+        schema: { type: "integer" },
+      },
     ],
     requestBody: {
-     required: true,
-     content: {
-      "multipart/form-data": {
-       schema: {
-        type: "object",
-        properties: {
-         file: {
-          type: "string",
-          format: "binary",
-         },
+      required: true,
+      content: {
+        "multipart/form-data": {
+          schema: {
+            type: "object",
+            properties: {
+              file: {
+                type: "string",
+                format: "binary",
+              },
+            },
+            required: ["file"],
+          },
         },
-        required: ["file"],
-       },
       },
-     },
     },
     responses: {
-     201: { description: "Media berhasil diupload" },
+      201: {
+        description: "Media berhasil diupload",
+      },
+      400: {
+        description: "File tidak valid atau ukuran file melebihi batas",
+      },
+      401: {
+        description: "Tidak terautentikasi",
+      },
+      404: {
+        description: "Data ekstrakurikuler tidak ditemukan",
+      },
     },
-   },
   },
+},
 
   "/extracurriculars/{id}/media/{mediaId}": {
    delete: {

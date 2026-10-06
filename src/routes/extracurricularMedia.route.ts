@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+ getExtracurricularMedia,
  addExtracurricularMedia,
  deleteExtracurricularMedia,
 } from "../controllers/extracurricularMedia.controller.js";
@@ -10,6 +11,11 @@ import {
 } from "../middlewares/uploadMedia.middleware.js";
 
 const router = Router();
+
+router.get(
+  "/:id/media",
+  getExtracurricularMedia,
+);
 
 router.post(
  "/:id/media",
